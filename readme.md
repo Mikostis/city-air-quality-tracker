@@ -29,23 +29,18 @@ To get started with this application, follow these steps:
 
 1. Clone the repository to your local machine:
    
-   ```bash
-   git clone https://github.com/Mikostis/air-quality-monitoring.git
+   git clone https://github.com/Mikostis/air-quality-tracker.git
    cd air-quality-monitoring
 Install the project dependencies:
 
-bash
-Copy code
 npm install
 Set up your PostgreSQL database and configure the connection in the database.js file.
 
 Replace the placeholder API keys in main.js and cron.js with your actual IQAir API keys.
 
-Start the application:
+# Start the application:
 
-bash
 Copy code
-npm start
 Access the API endpoints in your browser or using tools like Postman.
 
 Usage
@@ -64,16 +59,16 @@ Endpoint: /most-polluted-day-furth and /most-polluted-day-munich
 
 Description: Queries the database to find the most polluted day for Furth and Munich.
 
-CRON Job
+# CRON Job
 The CRON job runs every minute to fetch and store air quality data for Furth and Munich in the database.
 
-Database Schema
+## Database Schema
 The PostgreSQL database stores air quality data in an air_quality table. The table schema includes the following columns:
-
 id: A unique identifier for each record.
 data: JSONB column containing the air quality data in JSON format.
 timestamp: Timestamp indicating when the data was recorded.
-Technologies Used
+
+### Technologies Used
 Node.js
 Express.js
 Axios
