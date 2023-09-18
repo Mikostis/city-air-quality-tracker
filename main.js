@@ -8,6 +8,11 @@ const fetch = require("node-fetch");
 // database connection
 const db = require("./database");
 
+const {
+  getMostPollutedDay,
+  getMostPollutedDayForMunich,
+} = require("./queries");
+
 /**
  * axios Furth
  */
@@ -53,38 +58,17 @@ app.get("/air-quality-furth-axios", async (req, res) => {
 });
 
 // Define an API endpoint to get the most polluted day in Fürth
-app.get("/most-polluted-day", async (req, res) => {
+app.get("/most-polluted-day-Furth", async (req, res) => {
   try {
-    /**
-     *
-     * Query the database to find the most polluted day for Furth
-     *
-     * */
-    const client = await db.connect();
-    const query = `
-      SELECT DATE(timestamp) AS day, 
-             data->'current'->'pollution'->>'aqius' AS aqi 
-      FROM air_quality 
-      WHERE data->'data'->>'city' = 'Furth' 
-      ORDER BY (data->'data'->'current'->'pollution'->>'aqius')::integer DESC 
-      LIMIT 1`;
+    const mostPollutedDay = await getMostPollutedDay("Furth"); // Use the query function
 
-    const result = await client.query(query);
-    client.release();
-
-    if (result.rows.length > 0) {
-      const mostPollutedDay = result.rows[0].day;
-
-      // Format the date to a more readable format (e.g., "2023-09-16")
-      const formattedDate = mostPollutedDay.toISOString().split("T")[0];
-
-      res.json({ mostPollutedDay: formattedDate });
+    if (mostPollutedDay) {
+      res.json(mostPollutedDay);
     } else {
       res.status(404).json({ error: "No data available for Furth" });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Database error: " + error.message });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
@@ -146,36 +130,15 @@ app.get("/air-quality-munich-fetch", async (req, res) => {
 // Define an API endpoint to get the most polluted day in Munich using Fetch
 app.get("/most-polluted-day-munich", async (req, res) => {
   try {
-    /**
-     *
-     * Query the database to find the most polluted day for Munich
-     *
-     * */
-    const client = await db.connect();
-    const query = `
-      SELECT DATE(timestamp) AS day, 
-             data->'current'->'pollution'->>'aqius' AS aqi 
-      FROM air_quality 
-      WHERE data->'data'->>'city' = 'Munich' 
-      ORDER BY (data->'data'->'current'->'pollution'->>'aqius')::integer DESC 
-      LIMIT 1`;
+    const mostPollutedDay = await getMostPollutedDayForMunich("Munich"); // Use the new query function
 
-    const result = await client.query(query);
-    client.release();
-
-    if (result.rows.length > 0) {
-      const mostPollutedDay = result.rows[0].day;
-
-      // Format the date to a more readable format ( "2023-09-16")
-      const formattedDate = mostPollutedDay.toISOString().split("T")[0];
-
-      res.json({ mostPollutedDay: formattedDate });
+    if (mostPollutedDay) {
+      res.json(mostPollutedDay);
     } else {
       res.status(404).json({ error: "No data available for Munich" });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Database error: " + error.message });
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
