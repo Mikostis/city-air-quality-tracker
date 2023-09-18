@@ -4,9 +4,12 @@ const app = express();
 const port = 3000;
 const cron = require("node-cron");
 const fetch = require("node-fetch");
+require("dotenv").config();
 
 // database connection
 const db = require("./database");
+
+const apiKey = process.env.API_KEY;
 
 /**
  * axios Furth
@@ -14,8 +17,6 @@ const db = require("./database");
 
 // Define an API endpoint to get air quality of the nearest city using Axios
 app.get("/air-quality-nearest-city-axios", async (req, res) => {
-  const apiKey = "0d132a15-ab92-4b8b-8ff6-45d883a8b1f5"; // Replace with your actual API key
-
   try {
     // Make a request to the IQAir API using Axios to get air quality
     const response = await axios.get(
@@ -33,8 +34,6 @@ app.get("/air-quality-nearest-city-axios", async (req, res) => {
 
 // Define an API endpoint to get air quality for Furth using Axios
 app.get("/air-quality-furth-axios", async (req, res) => {
-  const apiKey = "0d132a15-ab92-4b8b-8ff6-45d883a8b1f5"; // Replace with your actual API key
-
   try {
     // Make a request to the IQAir API using Axios to get air quality for Furth
     const response = await axios.get(
@@ -90,8 +89,6 @@ app.get("/most-polluted-day", async (req, res) => {
 
 // CRON job to fetch and save air quality data for Nuremberg-Furth every 1 minute
 cron.schedule("* * * * *", async () => {
-  const apiKey = "0d132a15-ab92-4b8b-8ff6-45d883a8b1f5"; // Replace with your actual API key
-
   try {
     // Make a request to the IQAir API using Axios to get air quality for Nuremberg
 
@@ -119,8 +116,6 @@ cron.schedule("* * * * *", async () => {
  */
 
 app.get("/air-quality-munich-fetch", async (req, res) => {
-  const apiKey = "0d132a15-ab92-4b8b-8ff6-45d883a8b1f5";
-
   try {
     // Make a request to the IQAir API using Fetch to get air quality for Munich
     const response = await fetch(
@@ -183,8 +178,6 @@ app.get("/most-polluted-day-munich", async (req, res) => {
 
 // CRON job to fetch and save air quality data for Munich using Fetch
 cron.schedule("* * * * *", async () => {
-  const apiKey = "0d132a15-ab92-4b8b-8ff6-45d883a8b1f5"; // Replace with your actual API key
-
   try {
     // Make a request to the IQAir API using Fetch to get air quality for Munich
     const response = await fetch(
